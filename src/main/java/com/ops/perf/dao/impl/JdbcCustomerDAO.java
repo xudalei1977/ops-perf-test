@@ -17,7 +17,7 @@ public class JdbcCustomerDAO extends JdbcDaoSupport implements CustomerDao {
 	}
 
 	@Override
-	public Customer findByCustomerById(int id) {
+	public Customer findCustomerById(int id) {
 		String sql = "select * from customer where id = ?";
 		Map<String, Object>  customerMap =  getJdbcTemplate().queryForMap(sql, id);
 		

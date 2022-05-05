@@ -2,8 +2,8 @@ package com.ops.perf;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import com.ops.perf.dao.CustomerDao;
-import com.ops.perf.model.Customer;
+import com.ops.perf.dao.WebPageDao;
+import com.ops.perf.model.WebPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Date;
@@ -28,31 +28,46 @@ public class Test {
             context = new ClassPathXmlApplicationContext("spring-trino-jdbc-connect.xml");
         else if(args[0].equals("impala"))
             context = new ClassPathXmlApplicationContext("spring-impala-jdbc-connect.xml");
+        else if(args[0].equals("spark"))
+            context = new ClassPathXmlApplicationContext("spring-spark-jdbc-connect.xml");
         else if(args[0].equals("mysql"))
             context = new ClassPathXmlApplicationContext("spring-mysql-jdbc-connect.xml");
         else{
-            log.error("--Usage : java -jar ops-perf-test-1.0-SNAPSHOT.jar <trino/hive/impala>");
+            log.error("--Usage : java -jar ops-perf-test-1.0-SNAPSHOT-jar-with-dependencies.jar <trino/hive/impala>");
             return;
         }
 
-        CustomerDao customerDAO = (CustomerDao) context.getBean("customerSimpleDAO");
+        WebPageDao webPageDAO = (WebPageDao) context.getBean("webPageSimpleDAO");
         
-//        Customer customer = new Customer(1, "Dalei", 45);
-//        customerDAO.insert(customer);
+        WebPage webPage = new WebPage(2,
+                "AAAAAAAACAAAAAAA",
+                "1997-09-03",
+                "2000-09-02",
+                2450809,
+                2452620,
+                "N",
+                0,
+                "http://www.foo.com",
+                "dynamic",
+                3588,
+                22,
+                5,
+                0,       "default", "default");
+//        webPageDAO.insert(webPage);
 
         for(int i = 0; i < Integer.parseInt(args[1]); i++) {
-            Thread t1 = new Thread(new Task(customerDAO, Integer.parseInt(args[2])));
+            Thread t1 = new Thread(new Task(webPageDAO, Integer.parseInt(args[2])));
             t1.start();
         }
 	}
 
     public static class Task implements Runnable {
         public static Logger log = LoggerFactory.getLogger(Task.class);
-        private CustomerDao customerDAO;
+        private WebPageDao webPageDAO;
         private int batchNum;
 
-        public Task(CustomerDao _customerDAO, int _batchNum){
-            this.customerDAO = _customerDAO;
+        public Task(WebPageDao _webPageDAO, int _batchNum){
+            this.webPageDAO = _webPageDAO;
             this.batchNum = _batchNum;
         }
 
@@ -62,8 +77,8 @@ public class Test {
             long beginTime = (new Date()).getTime();
 
             while(count++ <= batchNum){
-                Customer customer1 = customerDAO.findByCustomerById(1);
-                log.debug("*********** Thread := " + Thread.currentThread() + "***** customer1 := " + customer1);
+                WebPage webPage1 = webPageDAO.findWebPageBySK(2);
+                log.debug("*********** Thread := " + Thread.currentThread() + "***** webPage := " + webPage1);
             }
 
             long endTime = (new Date()).getTime();

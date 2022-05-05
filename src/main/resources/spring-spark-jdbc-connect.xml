@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	    http://www.springframework.org/schema/tx
+	    http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	    http://www.springframework.org/schema/aop
+	    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	    http://www.springframework.org/schema/context 
+	    http://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<!-- 引入外部的属性文件 -->
+	<context:property-placeholder location="classpath:spark-jdbc.properties"/>
+	
+	<!-- 配置数据源 -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driverClass}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+	</bean>
+	
+	<!-- 通过 spring ioc 容器自动注入 JdbcCustomerDAO  -->
+	<bean id="customerDAO" class="com.ops.perf.dao.impl.JdbcCustomerDAO">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="customerSimpleDAO" class="com.ops.perf.dao.impl.SimpleJdbcCustomerDAO">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+</beans>

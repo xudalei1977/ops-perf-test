@@ -24,11 +24,11 @@
 	</bean>
 	
 	<!-- 通过 spring ioc 容器自动注入 JdbcCustomerDAO  -->
-	<bean id="customerDAO" class="com.ops.perf.dao.impl.JdbcCustomerDAO">
+	<bean id="webPageDAO" class="com.ops.perf.dao.impl.JdbcWebPageDAO">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
-	<bean id="customerSimpleDAO" class="com.ops.perf.dao.impl.SimpleJdbcCustomerDAO">
+	<bean id="webPageSimpleDAO" class="com.ops.perf.dao.impl.SimpleJdbcWebPageDAO">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	

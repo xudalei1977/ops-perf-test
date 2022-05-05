@@ -26,11 +26,11 @@ public class SimpleJdbcCustomerDAO extends NamedParameterJdbcDaoSupport implemen
 
 		SqlParameterSource ps = new BeanPropertySqlParameterSource(customer);
 		int i = getNamedParameterJdbcTemplate().update(sql, ps);
-		log.debug("***** affected row " + i);
+		log.info("***** affected row " + i);
 	}
 	
 	@Override
-	public Customer findByCustomerById(int id) {
+	public Customer findCustomerById(int id) {
 		String sql = "select * from customer where id = :id";
 		
 		Map<String, Object> map = new HashMap();
@@ -43,7 +43,7 @@ public class SimpleJdbcCustomerDAO extends NamedParameterJdbcDaoSupport implemen
 
 		Set<String> keys = customerMap.keySet();
 		for(String key:keys){
-			log.debug("****** key := " + key + " value := " + customerMap.get(key));
+			log.info("****** key := " + key + " value := " + customerMap.get(key));
 		}
 
 		Customer customer = new Customer(
